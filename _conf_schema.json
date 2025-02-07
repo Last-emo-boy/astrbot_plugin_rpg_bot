@@ -1,0 +1,157 @@
+{
+    "default_character_hp": {
+      "description": "角色初始生命值",
+      "type": "int",
+      "default": 100
+    },
+    "default_character_attack": {
+      "description": "角色初始物理攻击",
+      "type": "int",
+      "default": 10
+    },
+    "default_character_defense": {
+      "description": "角色初始物理防御",
+      "type": "int",
+      "default": 5
+    },
+    "default_magic_attack": {
+      "description": "角色初始法术攻击",
+      "type": "int",
+      "default": 8
+    },
+    "default_magic_defense": {
+      "description": "角色初始法术防御",
+      "type": "int",
+      "default": 5
+    },
+    "default_poison": {
+      "description": "角色初始毒属性（额外伤害或抗性）",
+      "type": "int",
+      "default": 0
+    },
+    "default_fire": {
+      "description": "角色初始火属性（额外伤害或抗性）",
+      "type": "int",
+      "default": 0
+    },
+    "default_ice": {
+      "description": "角色初始冰属性（额外伤害或抗性）",
+      "type": "int",
+      "default": 0
+    },
+    "skill_db": {
+      "description": "技能数据库，定义每个技能的类型、基础倍数、消耗和描述",
+      "type": "object",
+      "default": {
+        "斩击": {
+          "type": "physical",
+          "base_multiplier": 1.2,
+          "cost": 0,
+          "description": "挥剑攻击，伤害略高于普通攻击。"
+        },
+        "火球术": {
+          "type": "magic",
+          "base_multiplier": 1.5,
+          "cost": 10,
+          "description": "发射火球，对敌人造成火属性法术伤害。"
+        },
+        "穿刺": {
+          "type": "physical",
+          "base_multiplier": 1.1,
+          "cost": 0,
+          "description": "快速穿刺，攻击速度快，但伤害较低。"
+        },
+        "防御": {
+          "type": "buff",
+          "base_multiplier": 0,
+          "cost": 0,
+          "description": "加强防御，减少受到的伤害。"
+        }
+      }
+    },
+    "weapon": {
+      "description": "武器相关配置",
+      "type": "object",
+      "default": {
+        "weapon_types": ["剑", "斧", "锤", "弓", "匕首"],
+        "weapon_adjectives": ["锋利的", "沉重的", "轻盈的", "破旧的", "神秘的"],
+        "damage_range": [2, 8],
+        "upgrade_factor": 1.1,
+        "max_upgrade_level": 10,
+        "default_weapon_damage": 5
+      }
+    },
+    "map": {
+      "description": "地图与房间生成配置",
+      "type": "object",
+      "default": {
+        "door_probability": 0.5,
+        "item_probability": 0.3,
+        "room_descriptions": [
+          "一片荒芜之地",
+          "绿意盎然的森林",
+          "神秘的遗迹",
+          "阴暗的地下室",
+          "开阔的草原",
+          "崎岖的山路",
+          "雾气缭绕的沼泽",
+          "破败的城堡遗址"
+        ]
+      }
+    },
+    "item": {
+      "description": "物品系统配置（非武器类物品）",
+      "type": "object",
+      "default": {
+        "potion_range": [20, 50],
+        "gold_range": [5, 20],
+        "skill_list": ["斩击", "火球术", "穿刺", "防御"],
+        "item_types": ["potion", "scroll", "treasure", "gold", "misc"]
+      }
+    },
+    "rune": {
+      "description": "符文系统配置",
+      "type": "object",
+      "default": {
+        "rune_types": ["fire", "ice", "poison", "generic"],
+        "rune_adjectives": ["炽热的", "寒冰的", "剧毒的", "神秘的"],
+        "bonus_range": [1, 5],
+        "rune_upgrade_factor": 1.2,
+        "max_rune_upgrade_level": 5
+      }
+    },
+    "loot": {
+      "description": "掉落物系统配置",
+      "type": "object",
+      "default": {
+        "drop_rates": {
+          "weapon": 0.2,
+          "rune": 0.15,
+          "gold": 0.4,
+          "potion": 0.15,
+          "treasure": 0.1
+        },
+        "gold_range": [5, 20],
+        "potion_range": [20, 50]
+      }
+    },
+    "llm": {
+      "description": "LLM 相关配置",
+      "type": "object",
+      "default": {
+        "llm_system_prompt": "你是一位优秀的叙事大师，请生成引人入胜的游戏叙事。",
+        "llm_temperature": 0.7
+      }
+    },
+    "exp_growth_factor": {
+      "description": "经验增长系数，升级所需经验 = 100 * (等级 ^ exp_growth_factor)",
+      "type": "float",
+      "default": 1.2
+    },
+    "default_dice_sides": {
+      "description": "默认骰子面数，用于技能检定等",
+      "type": "int",
+      "default": 6
+    }
+  }
+  
