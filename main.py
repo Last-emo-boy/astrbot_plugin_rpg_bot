@@ -3,7 +3,7 @@ import json
 import os
 import random
 
-# 导入后续各模块接口（这些模块后续单独实现）
+# 使用相对导入引入其它模块接口
 from .dice import roll_dice, skill_check
 from .character import CharacterManager
 from .map_gen import MapManager
@@ -14,25 +14,23 @@ from .llm_integration import LLMIntegration
 from .item import ItemManager
 from .rune import RuneManager
 from .loot import LootManager
-from .logger import get_logger
-
+from .logger import get_logger  # 导入自定义日志模块
 
 # 全局常量：四个方向及其反向映射
 DIRECTIONS = ["north", "south", "east", "west"]
 OPPOSITE = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
-# 持久化存储文件（游戏会话数据保存位置）
+# 持久化存储文件
 DATA_FILE = "game_data.json"
 
 def load_game_data():
-    """从 DATA_FILE 中加载游戏数据，若不存在则返回空字典"""
+    """从 DATA_FILE 中加载游戏数据，若文件不存在则返回空字典"""
     if os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, "r", encoding="utf-8") as f:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            try:
                 return json.load(f)
-        except Exception as e:
-            # 发生异常时返回空数据
-            return {}
+            except Exception as e:
+                return {}
     return {}
 
 def save_game_data(data):
@@ -40,26 +38,31 @@ def save_game_data(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-@register("rpg_bot", "Your Name", "大型RPG文字跑团插件，包含大世界地图、角色个性（远程/近战、物理/法术伤害、毒/火/冰属性）、武器升级、符文、掉落物系统、持久化存储和LLM叙事", "3.2.0", "repo url")
+@register("rpg_bot", "Your Name", "大型RPG文字跑团插件，包含大世界地图、角色个性、物理与法术攻击、武器升级、符文与掉落物系统、持久化存储和LLM叙事", "3.2.0", "repo url")
 class RPGPlugin(Star):
     def __init__(self, context: Context, config: dict):
         super().__init__(context)
         self.config = config
-        # 从持久化文件中加载游戏会话数据；若不存在则初始化为空字典
+        # 从持久化文件加载游戏会话数据
         self.game_sessions = load_game_data()
 
-        # 初始化各个子模块的管理器（这些模块后续分别实现具体逻辑）
+        # 初始化各子模块管理器
         self.character_manager = CharacterManager(self.config)
         self.map_manager = MapManager(self.config)
         self.combat_manager = CombatManager(self.config, self.game_sessions, self.character_manager, self.map_manager)
         self.weapon_manager = WeaponManager(self.config)
         self.skill_manager = SkillManager(self.config)
         self.llm_integration = LLMIntegration(self.context, self.config)
+        self.item_manager = ItemManager(self.config)
+        self.rune_manager = RuneManager(self.config)
+        self.loot_manager = LootManager(self.config)
 
-        self.context.logger.info("RPGPlugin 初始化完成。")
+        # 使用自定义 logger，不依赖 context.logger
+        self.logger = get_logger("RPGPlugin")
+        self.logger.info("RPGPlugin 初始化完成。")
 
     def persist_data(self):
-        """将当前游戏会话数据持久化保存到 DATA_FILE 中"""
+        """持久化当前游戏会话数据到文件"""
         save_game_data(self.game_sessions)
 
     # -------------------------------
@@ -70,20 +73,14 @@ class RPGPlugin(Star):
         """RPG 相关子命令组"""
         pass
 
-    # -------------------------------
-    # 子命令：启动游戏会话
-    # -------------------------------
+    # 以下各子命令调用各模块接口，示例代码略
+
     @rpg.command("startgame")
     async def start_game(self, event: AstrMessageEvent):
-        """
-        /rpg startgame
-        启动游戏会话，初始化大世界地图，从坐标 (0,0) 房间开始。
-        """
         session_id = event.session_id
         if session_id in self.game_sessions:
             yield event.plain_result("游戏会话已存在，请使用 /rpg status 查看状态。")
         else:
-            # 使用 MapManager 创建初始房间
             start_coord = (0, 0)
             world = {start_coord: self.map_manager.generate_room(start_coord)}
             self.game_sessions[session_id] = {
