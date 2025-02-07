@@ -3,14 +3,19 @@ import json
 import os
 import random
 
-# 导入后续各模块接口（这些模块后续单独实现）
-from dice import roll_dice, skill_check
-from character import CharacterManager
-from map_gen import MapManager
-from combat import CombatManager
-from weapon import WeaponManager
-from skill import SkillManager
-from llm_integration import LLMIntegration
+# 导入后续各模块接口
+from .dice import roll_dice, skill_check
+from .character import CharacterManager
+from .map_gen import MapManager
+from .combat import CombatManager
+from .weapon import WeaponManager
+from .skill import SkillManager
+from .llm_integration import LLMIntegration
+from .item import ItemManager
+from .rune import RuneManager
+from .loot import LootManager
+from .logger import get_logger
+
 
 # 全局常量：四个方向及其反向映射
 DIRECTIONS = ["north", "south", "east", "west"]
