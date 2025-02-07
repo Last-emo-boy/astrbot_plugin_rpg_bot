@@ -3,7 +3,7 @@ import json
 import os
 import random
 
-# 导入后续各模块接口
+# 导入后续各模块接口（这些模块后续单独实现）
 from .dice import roll_dice, skill_check
 from .character import CharacterManager
 from .map_gen import MapManager

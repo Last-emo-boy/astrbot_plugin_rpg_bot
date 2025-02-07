@@ -1,5 +1,5 @@
 import random
-from dice import skill_check
+from .dice import skill_check
 
 class SkillManager:
     def __init__(self, config: dict):

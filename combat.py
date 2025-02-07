@@ -1,5 +1,5 @@
 import random
-from dice import roll_dice, skill_check
+from .dice import roll_dice, skill_check
 
 class CombatManager:
     def __init__(self, config: dict, game_sessions: dict, character_manager, map_manager):
